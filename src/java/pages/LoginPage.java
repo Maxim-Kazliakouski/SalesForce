@@ -19,7 +19,7 @@ public class LoginPage extends BasePage {
     }
 
     public boolean isOpened() {
-        return waitForVisibility(LOGIN_BUTTON);
+        return waitForElementClickable(browser.findElement(LOGIN_BUTTON));
     }
 
     public void login(String username, String password) {
