@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class HomePage extends BasePage{
-    private final By SETUP_TITLE = By.xpath("//span[@title='Setup']");
+    private final By SETUP_TITLE = By.xpath("//span[@title='Service Setup']");
 
 
     public HomePage(WebDriver browser) {
