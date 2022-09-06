@@ -17,7 +17,7 @@ public abstract class BasePage {
         wait = new WebDriverWait(browser, Duration.ofSeconds(15));
     }
 
-    public boolean waitForVisibility(By locator) {
+    public static boolean waitForVisibility(By locator) {
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
             return true;
