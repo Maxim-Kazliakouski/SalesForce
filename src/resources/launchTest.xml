@@ -1,33 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd"[
-        <!ENTITY sid "00D5g00000FDsZ3!AQEAQMfUhIUz3SIPk97szCn0DQE7Jkq2gi.OQTHkngV20hXBhdQsB5i3dh4cpGvha3Ej83t2mp7ca8DNFg3bfRNmWn4Swlrl">]>
-<suite name="Smoke Test" parallel="tests" thread-count="2">
-    <!--    <listeners>-->
-    <!--        <listener class-name="tests.AnnotationTransformer"/>-->
-    <!--        <listener class-name="tests.TestListener"/>-->
-    <!--    </listeners>-->
-    <test name="Chrome">
-        <!--        <groups>-->
-        <!--            <run>-->
-        <!--                <include name="slow" />-->
-        <!--            </run>-->
-        <!--        </groups>-->
+        <!ENTITY headlessMode "true">]>
+<suite name="Tests SalesForce" parallel="classes" thread-count="3">
+    <listeners>
+        <listener class-name="tests.base.AnnotationTransformer"/>
+        <listener class-name="tests.base.TestListener"/>
+    </listeners>
+    <test name="Chrome: tests at Login page without login">
+        <groups>
+            <run>
+                <exclude name="valid login"/>
+            </run>
+        </groups>
         <classes>
-            <class name="tests.CreateContactPageTest"/>
             <class name="tests.LoginPageTest"/>
             <parameter name="browserType" value="chrome"/>
-            <parameter name="headlessMode" value="true"/>
-            <parameter name="sid" value="&sid;"/>
+            <parameter name="isLogin" value="false"/>
+            <parameter name="headlessMode" value="&headlessMode;"/>
         </classes>
-    </test> <!-- Test -->
-    <test name="Firefox">
+    </test>
+    <test name="Firefox: tests at Login page without login">
+        <groups>
+            <run>
+                <exclude name="valid login"/>
+            </run>
+        </groups>
         <classes>
-            <class name="tests.CreateContactPageTest"/>
             <class name="tests.LoginPageTest"/>
             <parameter name="browserType" value="firefox"/>
-            <parameter name="headlessMode" value="true"/>
-            <parameter name="sid" value="&sid;"/>
+            <parameter name="isLogin" value="false"/>
+            <parameter name="headlessMode" value="&headlessMode;"/>
         </classes>
-    </test> <!-- Test -->
+    </test>
+    <test name="Chrome">
+        <groups>
+            <run>
+                <exclude name="unsuccessful login"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="tests.LoginPageTest"/>
+            <class name="tests.CreateContactPageTest"/>
+            <parameter name="browserType" value="chrome"/>
+            <parameter name="username" value="chrome@oxa.sandbox"/>
+            <parameter name="password" value="M@xkaz1991"/>
+            <parameter name="headlessMode" value="&headlessMode;"/>
+        </classes>
+    </test>
+    <test name="Firefox">
+        <groups>
+            <run>
+                <exclude name="unsuccessful login"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="tests.LoginPageTest"/>
+            <class name="tests.CreateContactPageTest"/>
+            <parameter name="browserType" value="firefox"/>
+            <parameter name="username" value="firefox@oxa.sandbox"/>
+            <parameter name="password" value="M@xkaz1991"/>
+            <parameter name="headlessMode" value="&headlessMode;"/>
+        </classes>
+    </test>
 </suite>
 
