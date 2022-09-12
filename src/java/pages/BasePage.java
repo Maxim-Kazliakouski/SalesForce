@@ -11,12 +11,10 @@ public abstract class BasePage {
     WebDriver browser;
     static WebDriverWait wait;
 
-
     public BasePage(WebDriver browser) {
         this.browser = browser;
-        wait = new WebDriverWait(browser, Duration.ofSeconds(15));
+        wait = new WebDriverWait(browser, Duration.ofSeconds(10));
     }
-
     public static boolean waitForVisibility(By locator) {
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
@@ -45,6 +43,10 @@ public abstract class BasePage {
 
     public void changeExplicitlyWait(int timeOut) {
         wait = new WebDriverWait(browser, Duration.ofSeconds(timeOut));
+    }
+
+    public void click(By locator) {
+        browser.findElement(locator).click();
     }
 
     public void clickJS(By locator) {
