@@ -4,7 +4,7 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
 public class HomePage extends BasePage{
-    private final By SETUP_TITLE = By.xpath("//span[@title='Service Setup']");
+    private final By SEARCH = By.xpath("//input[@role='combobox']");
 
 
     public HomePage(WebDriver browser) {
@@ -18,6 +18,6 @@ public class HomePage extends BasePage{
     }
 
     public boolean isOpened(){
-        return waitForVisibility(SETUP_TITLE);
+        return waitForVisibility(SEARCH);
     }
 }
