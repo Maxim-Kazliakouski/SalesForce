@@ -24,7 +24,7 @@ public class CreateContactPageTest extends BaseTest {
         assertTrue(createContactPage.isToastMessageAppeared(),
                 "The confirmation message about success created user wasn't appeared!");
         assertEquals(createContactPage.getToastMessageText(),
-                "Contact \"" + salutationOption + " " + firstName + " " + lastName + "\" has been created.");
+                "Contact \"" + salutationOption + " " + firstName + " " + lastName + "\" was created.");
         postConditionDeleteContact();
     }
 }
