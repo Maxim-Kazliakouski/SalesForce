@@ -6,7 +6,6 @@ import tests.wrappers.ButtonAtCreateUserPage;
 import tests.wrappers.Dropdown;
 import tests.wrappers.Input;
 import tests.wrappers.Textarea;
-import java.io.IOException;
 
 public class CreateContactPage extends BasePage {
     private final By TITLE_CREATE_CONTACT_PAGE = By.xpath("//h2[text()='New Contact']");
@@ -17,12 +16,18 @@ public class CreateContactPage extends BasePage {
         super(browser);
     }
 
-    public void createContact(String firstName, String lastName, String phone, String salutationOption, String leadSourceOption, String text) throws IOException, InterruptedException {
+    public void createContact(String firstName, String lastName, String phone, String salutationOption, String leadSourceOption, String text) {
         new Input(browser, "First Name").write(firstName);
         new Input(browser, "Last Name").write(lastName);
         new Input(browser, "Phone").write(phone);
-        new Dropdown(browser, "Salutation").select(salutationOption);
-        new Dropdown(browser, "Lead Source").select(leadSourceOption);
+        try {
+            new Dropdown(browser, "Salutation").select(salutationOption);
+            new Dropdown(browser, "Lead Source").select(leadSourceOption);
+        }
+        catch (InterruptedException error){
+            System.out.println("Select method hadn't performed!");
+            System.out.println("Error! --> " + error.toString().substring(10));
+        }
         new Textarea(browser, "Mailing Street").input(text);
         new ButtonAtCreateUserPage(browser,"Save").click();
     }
