@@ -1,6 +1,5 @@
 package tests;
 
-import org.testng.annotations.Parameters;
 import org.testng.annotations.Test;
 import tests.base.BaseTest;
 
@@ -9,7 +8,6 @@ import static org.testng.Assert.assertTrue;
 
 public class CreateContactPageTest extends BaseTest {
 
-    @Parameters({"username", "password"})
     @Test(description = "creating user")
     public void createNewUser() {
         String firstName = faker.name().firstName();
