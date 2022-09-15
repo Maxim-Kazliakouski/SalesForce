@@ -2,7 +2,6 @@ package pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import tests.wrappers.ButtonAtCreateUserPage;
 import tests.wrappers.Dropdown;
 import tests.wrappers.Input;
 import tests.wrappers.Textarea;
@@ -11,6 +10,7 @@ public class CreateContactPage extends BasePage {
     private final By TITLE_CREATE_CONTACT_PAGE = By.xpath("//h2[text()='New Contact']");
     private final By TOAST_MESSAGE = By.xpath("//span[@class='toastMessage slds-text-heading--small forceActionsText']");
     public static By CREATED_CONTACT_NAME = By.xpath("//span[@class='custom-truncate uiOutputText']");
+    public static By SAVE_BUTTON = By.xpath("//button[text()='Save']");
 
     public CreateContactPage(WebDriver browser) {
         super(browser);
@@ -20,16 +20,10 @@ public class CreateContactPage extends BasePage {
         new Input(browser, "First Name").write(firstName);
         new Input(browser, "Last Name").write(lastName);
         new Input(browser, "Phone").write(phone);
-        try {
-            new Dropdown(browser, "Salutation").select(salutationOption);
-            new Dropdown(browser, "Lead Source").select(leadSourceOption);
-        }
-        catch (InterruptedException error){
-            System.out.println("Select method hadn't performed!");
-            System.out.println("Error! --> " + error.toString().substring(10));
-        }
+        new Dropdown(browser, "Salutation").select(salutationOption);
+        new Dropdown(browser, "Lead Source").select(leadSourceOption);
         new Textarea(browser, "Mailing Street").input(text);
-        new ButtonAtCreateUserPage(browser,"Save").click();
+        browser.findElement(SAVE_BUTTON).click();
     }
 
     public void open() {
@@ -41,22 +35,16 @@ public class CreateContactPage extends BasePage {
         return waitForVisibility(TITLE_CREATE_CONTACT_PAGE);
     }
 
-    public boolean isToastMessageAppeared(){
+    public boolean isToastMessageAppeared() {
         return waitForVisibility(TOAST_MESSAGE);
     }
 
-    public String getToastMessageText(){
+    public String getToastMessageText() {
         System.out.println(browser.findElement(TOAST_MESSAGE).getText());
         return browser.findElement(TOAST_MESSAGE).getText();
     }
 
-    public static boolean isContactNameAppeared(){
+    public static boolean isContactNameAppeared() {
         return waitForVisibility(CREATED_CONTACT_NAME);
     }
 }
-
-
-
-
-
-
