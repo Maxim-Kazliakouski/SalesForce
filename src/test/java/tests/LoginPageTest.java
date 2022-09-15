@@ -30,7 +30,7 @@ public class LoginPageTest extends BaseTest {
         loginPage.open();
         BasePage.waitForPageLoaded();
         assertTrue(loginPage.isOpened(), "Login page wasn't opened!");
-        loginPage.signUpForNegative(invalidUsername, invalidPassword);
+        loginPage.signUp(invalidUsername, invalidPassword);
         assertEquals(loginPage.getErrorMessage(), error, "There is no error message after missing password or error message has been changed!");
     }
 
@@ -71,4 +71,3 @@ public class LoginPageTest extends BaseTest {
         assertTrue(forgotYourPasswordPage.isOpened(), "The 'Forgot password' page hadn't opened!");
     }
 }
-
