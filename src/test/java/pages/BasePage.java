@@ -15,6 +15,7 @@ public abstract class BasePage {
         this.browser = browser;
         wait = new WebDriverWait(browser, Duration.ofSeconds(10));
     }
+
     public static boolean waitForVisibility(By locator) {
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
@@ -39,14 +40,6 @@ public abstract class BasePage {
                 return ((JavascriptExecutor) driver).executeScript("return document.readyState").toString().equals("complete");
             }
         };
-    }
-
-    public void changeExplicitlyWait(int timeOut) {
-        wait = new WebDriverWait(browser, Duration.ofSeconds(timeOut));
-    }
-
-    public void click(By locator) {
-        browser.findElement(locator).click();
     }
 
     public void clickJS(By locator) {
