@@ -16,6 +16,8 @@ public abstract class BasePage {
         wait = new WebDriverWait(browser, Duration.ofSeconds(10));
     }
 
+    public final static String BASE_URL = "https://oxagile-dev-ed.my.salesforce.com";
+
     public static boolean waitForVisibility(By locator) {
         try {
             wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
