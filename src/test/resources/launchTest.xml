@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd"[
+        <!ENTITY headlessMode "true">]>
+<suite name="Tests SalesForce" parallel="classes" thread-count="3">
+    <listeners>
+        <listener class-name="tests.base.AnnotationTransformer"/>
+        <listener class-name="tests.base.TestListener"/>
+    </listeners>
+    <test name="Chrome: tests at Login page without login">
+        <groups>
+            <run>
+                <exclude name="valid login"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="tests.LoginPageTest"/>
+            <parameter name="browserType" value="chrome"/>
+            <parameter name="isLogin" value="false"/>
+            <parameter name="headlessMode" value="&headlessMode;"/>
+        </classes>
+    </test>
+    <test name="Firefox: tests at Login page without login">
+        <groups>
+            <run>
+                <exclude name="valid login"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="tests.LoginPageTest"/>
+            <parameter name="browserType" value="firefox"/>
+            <parameter name="isLogin" value="false"/>
+            <parameter name="headlessMode" value="&headlessMode;"/>
+        </classes>
+    </test>
+    <test name="Chrome">
+        <groups>
+            <run>
+                <exclude name="unsuccessful login"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="tests.LoginPageTest"/>
+            <class name="tests.CreateContactPageTest"/>
+            <parameter name="browserType" value="chrome"/>
+            <parameter name="headlessMode" value="&headlessMode;"/>
+        </classes>
+    </test>
+    <test name="Firefox">
+        <groups>
+            <run>
+                <exclude name="unsuccessful login"/>
+            </run>
+        </groups>
+        <classes>
+            <class name="tests.LoginPageTest"/>
+            <class name="tests.CreateContactPageTest"/>
+            <parameter name="browserType" value="firefox"/>
+            <parameter name="headlessMode" value="&headlessMode;"/>
+        </classes>
+    </test>
+</suite>
