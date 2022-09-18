@@ -1,5 +1,6 @@
 package pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import tests.wrappers.Dropdown;
@@ -16,6 +17,7 @@ public class CreateContactPage extends BasePage {
         super(browser);
     }
 
+    @Step("Creating user with firstname '{firstName}', lastname '{lastName}' and other parameters...")
     public void createContact(String firstName, String lastName, String phone, String salutationOption, String leadSourceOption, String text) {
         new Input(browser, "First Name").write(firstName);
         new Input(browser, "Last Name").write(lastName);
@@ -26,10 +28,12 @@ public class CreateContactPage extends BasePage {
         browser.findElement(SAVE_BUTTON).click();
     }
 
+    @Step("Open the Create contact page")
     public void open() {
         String CREATE_USER_URL = "https://oxagile-dev-ed.lightning.force.com/lightning/o/Contact/new?count=1";
         browser.get(CREATE_USER_URL);
     }
+
 
     public boolean isOpened() {
         return waitForVisibility(TITLE_CREATE_CONTACT_PAGE);
@@ -39,6 +43,7 @@ public class CreateContactPage extends BasePage {
         return waitForVisibility(TOAST_MESSAGE);
     }
 
+    @Step("Getting toast message")
     public String getToastMessageText() {
         System.out.println(browser.findElement(TOAST_MESSAGE).getText());
         return browser.findElement(TOAST_MESSAGE).getText();
