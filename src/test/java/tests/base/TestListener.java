@@ -1,8 +1,11 @@
 package tests.base;
 
+import org.openqa.selenium.NoSuchSessionException;
+import org.openqa.selenium.WebDriver;
 import org.testng.ITestContext;
 import org.testng.ITestListener;
 import org.testng.ITestResult;
+import tests.utils.SFAPIUtils;
 
 import java.util.concurrent.TimeUnit;
 
@@ -26,6 +29,11 @@ public class TestListener implements ITestListener {
         System.out.println(String.format("======================================== FAILED TEST %s Duration: %ss ========================================", iTestResult.getName(),
                 getExecutionTime(iTestResult)));
         // TODO make bug auto reporting
+        WebDriver browser = (WebDriver) iTestResult.getTestContext().getAttribute("browser");
+        if (browser != null) {
+            SFAPIUtils.takeScreenshot(browser);
+//        takeScreenshot(iTestResult);
+        }
     }
 
     @Override
@@ -50,5 +58,19 @@ public class TestListener implements ITestListener {
 
     private long getExecutionTime(ITestResult iTestResult) {
         return TimeUnit.MILLISECONDS.toSeconds(iTestResult.getEndMillis() - iTestResult.getStartMillis());
+    }
+
+    private byte[] takeScreenshot(ITestResult iTestResult) {
+        ITestContext context = iTestResult.getTestContext();
+        try {
+            WebDriver driver = (WebDriver) context.getAttribute("browser");
+            if (driver != null) {
+                return SFAPIUtils.takeScreenshot(driver);
+            } else {
+                return new byte[]{};
+            }
+        } catch (NoSuchSessionException | IllegalStateException ex) {
+            return new byte[]{};
+        }
     }
 }
