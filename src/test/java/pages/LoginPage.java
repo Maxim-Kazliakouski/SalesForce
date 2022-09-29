@@ -1,20 +1,34 @@
 package pages;
 
 import io.qameta.allure.Step;
-import org.openqa.selenium.By;
+import lombok.extern.log4j.Log4j2;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
+import static java.lang.String.format;
 import static org.testng.Assert.assertTrue;
-
+@Log4j2
 public class LoginPage extends BasePage {
-    private final By ERROR_MISSED_PASSWORD = By.id("error");
-    private final By TEXT_CHECKBOX_REMEMBER_ME = By.xpath("//label[text()='Remember me']");
-    private final By CHECKBOX_REMEMBER_ME = By.id("rememberUn");
-    private final By FORGOT_PASSWORD_LINK = By.xpath("//a[text()='Forgot Your Password?']");
-    public static final By USERNAME = By.id("username");
-    public static final By PASSWORD = By.id("password");
-    public static final By LOGIN_BUTTON = By.id("Login");
+
+    @FindBy(id = "error")
+    WebElement errorMissedPassword;
+    @FindBy(xpath = "//label[text()='Remember me']")
+    WebElement textCheckboxRememberMe;
+    @FindBy(id = "rememberUn")
+    WebElement checkboxRememberMe;
+    @FindBy(xpath = "//a[text()='Forgot Your Password?']")
+    WebElement forgotPasswordLink;
+    @FindBy(id = "username")
+    WebElement USERNAME;
+    @FindBy(id = "password")
+    WebElement PASSWORD;
+    @FindBy(id = "Login")
+    WebElement loginButton;
+
+    public LoginPage(WebDriver browser) {
+        super(browser);
+    }
 
     public static String getClientID() {
         return "3MVG9fe4g9fhX0E5qL4iy8FRVTFbj4GiI1_XIxZT1LuG4cX1MTDHGmR9YAg.or2_VnWf6_jJtseR1_QOYFe88";
@@ -24,58 +38,55 @@ public class LoginPage extends BasePage {
         return "4BB30BC4D932875F595B9E26F3125732351400BF83491DB91EFCC30C968B43D7";
     }
 
-    public LoginPage(WebDriver browser) {
-        super(browser);
-        PageFactory.initElements(browser, this);
-    }
-
-    @Step("Opening login page")
     public void open() {
         browser.get(BASE_URL);
     }
 
     public boolean isOpened() {
-        return waitForElementClickable(browser.findElement(LOGIN_BUTTON));
+        return waitForElementClickable(loginButton);
     }
 
     @Step("Click on forgot password link at Login page")
-    public void clickForgotPasswordLink() {
-        browser.findElement(FORGOT_PASSWORD_LINK).click();
+    public LoginPage clickForgotPasswordLink() {
+        log.info("Click on 'Forgot password' link'");
+        forgotPasswordLink.click();
+        return this;
     }
 
-
     @Step("Getting error message")
-    public String getErrorMessage() {
-        waitForVisibility(ERROR_MISSED_PASSWORD);
-        return browser.findElement(ERROR_MISSED_PASSWORD).getText();
+    public String errorMessage() {
+        log.info("Getting error message...");
+        waitForVisibility(errorMissedPassword);
+        log.info(format("Error message has been got --> %s", errorMissedPassword.getText()));
+        return errorMissedPassword.getText();
     }
 
     @Step("Checkbox 'Remember me' at the Login Page")
     public boolean isCheckboxRememberMeAppeared() {
-        return waitForVisibility(TEXT_CHECKBOX_REMEMBER_ME);
+        log.info("Checking 'Remember me' checkbox at 'Login Page'");
+        return waitForVisibility(textCheckboxRememberMe);
     }
 
     @Step("Checkbox 'Remember me' has unchecked position")
     public boolean isCheckboxRememberMeUnchecked() {
-        waitForVisibility(CHECKBOX_REMEMBER_ME);
-//        return browser.findElement(CHECKBOX_REMEMBER_ME).isSelected();
-        return browser.findElement(CHECKBOX_REMEMBER_ME).isSelected();
+        log.info("Checking 'Remember me' checkbox is unchecked at 'Login Page'");
+        waitForVisibility(checkboxRememberMe);
+        return checkboxRememberMe.isSelected();
     }
 
-    @Step("'Forgot Password Link' at the Forgot Password page")
+    @Step("'Forgot Password' link at the 'Forgot Password' page")
     public boolean isForgotPasswordLinkAppeared() {
-        return waitForVisibility(FORGOT_PASSWORD_LINK);
+        log.info("Checking 'Forgot password' link' at the 'Forgot password' page");
+        return waitForVisibility(forgotPasswordLink);
     }
 
-    @Step("Login by '{username}', using password '{password}'")
     public void signUp(String username, String password) {
-        open();
-        assertTrue(isOpened(), "Login page wasn't opened!");
-        assertTrue(waitForElementClickable(browser.findElement(USERNAME)), "There is no field USERNAME");
-        browser.findElement(USERNAME).sendKeys(username);
-        waitForVisibility(PASSWORD);
-        browser.findElement(PASSWORD).sendKeys(password);
-        waitForVisibility(LOGIN_BUTTON);
-        browser.findElement(LOGIN_BUTTON).click();
+        assertTrue(waitForElementClickable(USERNAME), "There is no field USERNAME");
+        USERNAME.sendKeys(username);
+        assertTrue(waitForElementClickable(PASSWORD), "The 'PASSWORD' field isn't clickable");
+        assertTrue(waitForVisibility(PASSWORD), "There is no 'PASSWORD' field");
+        PASSWORD.sendKeys(password);
+        waitForVisibility(loginButton);
+        loginButton.click();
     }
 }
