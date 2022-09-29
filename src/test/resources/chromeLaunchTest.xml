@@ -13,11 +13,11 @@
             <parameter name="headlessMode" value="&headlessMode;"/>
         </classes>
     </test>
-<!--    <test name="Chrome: create contact tests">-->
-<!--        <classes>-->
-<!--            <class name="tests.CreateContactPageTest"/>-->
-<!--            <parameter name="browserType" value="chrome"/>-->
-<!--            <parameter name="headlessMode" value="&headlessMode;"/>-->
-<!--        </classes>-->
-<!--    </test>-->
+    <test name="Chrome: create contact tests">
+        <classes>
+            <class name="tests.CreateContactPageTest"/>
+            <parameter name="browserType" value="chrome"/>
+            <parameter name="headlessMode" value="&headlessMode;"/>
+        </classes>
+    </test>
 </suite>
