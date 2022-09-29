@@ -6,53 +6,29 @@
         <listener class-name="tests.base.AnnotationTransformer"/>
         <listener class-name="tests.base.TestListener"/>
     </listeners>
-    <test name="Chrome: tests at Login page without login">
-        <groups>
-            <run>
-                <exclude name="valid login"/>
-            </run>
-        </groups>
+    <test name="Chrome: Login tests">
         <classes>
             <class name="tests.LoginPageTest"/>
             <parameter name="browserType" value="chrome"/>
-            <parameter name="isLogin" value="false"/>
             <parameter name="headlessMode" value="&headlessMode;"/>
         </classes>
     </test>
-    <test name="Firefox: tests at Login page without login">
-        <groups>
-            <run>
-                <exclude name="valid login"/>
-            </run>
-        </groups>
+    <test name="Firefox: Login tests">
         <classes>
             <class name="tests.LoginPageTest"/>
             <parameter name="browserType" value="firefox"/>
-            <parameter name="isLogin" value="false"/>
             <parameter name="headlessMode" value="&headlessMode;"/>
         </classes>
     </test>
-    <test name="Chrome">
-        <groups>
-            <run>
-                <exclude name="unsuccessful login"/>
-            </run>
-        </groups>
+    <test name="Chrome: create contact tests">
         <classes>
-            <class name="tests.LoginPageTest"/>
             <class name="tests.CreateContactPageTest"/>
             <parameter name="browserType" value="chrome"/>
             <parameter name="headlessMode" value="&headlessMode;"/>
         </classes>
     </test>
-    <test name="Firefox">
-        <groups>
-            <run>
-                <exclude name="unsuccessful login"/>
-            </run>
-        </groups>
+    <test name="Firefox: create contact tests">
         <classes>
-            <class name="tests.LoginPageTest"/>
             <class name="tests.CreateContactPageTest"/>
             <parameter name="browserType" value="firefox"/>
             <parameter name="headlessMode" value="&headlessMode;"/>
