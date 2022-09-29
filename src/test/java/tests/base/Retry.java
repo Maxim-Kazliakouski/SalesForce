@@ -1,8 +1,12 @@
 package tests.base;
 
+import lombok.extern.log4j.Log4j2;
 import org.testng.IRetryAnalyzer;
 import org.testng.ITestResult;
 
+import static java.lang.String.format;
+
+@Log4j2
 public class Retry implements IRetryAnalyzer {
 
     private int attempt = 1;
@@ -15,6 +19,7 @@ public class Retry implements IRetryAnalyzer {
                 attempt++;
                 iTestResult.setStatus(ITestResult.FAILURE);
                 System.out.println("Retrying once again");
+                log.info(format("Retrying test once again --> %s", iTestResult.getName()));
                 return true;
             } else {
                 iTestResult.setStatus(ITestResult.FAILURE);
