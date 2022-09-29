@@ -1,19 +1,24 @@
 package tests.base;
 
 import com.github.javafaker.Faker;
-import io.github.bonigarcia.wdm.WebDriverManager;
+import dto.driverManager.BrowserManager;
+import factories.BrowserManagerFactory;
+import io.qameta.allure.Step;
+import lombok.extern.log4j.Log4j2;
 import org.apache.commons.io.FileUtils;
 import org.json.simple.parser.ParseException;
-import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import org.testng.ITestContext;
 import org.testng.annotations.*;
-import pages.*;
-import tests.utils.SFAPIUtils;
+import pages.CreateContactPage;
+import pages.ForgotYourPasswordPage;
+import pages.HomePage;
+import steps.CreateContactSteps;
+import steps.LoginSteps;
+import utils.SFAPIUtils;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,14 +27,29 @@ import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
 
+import static factories.BrowserManagerFactory.DriverType.CHROME;
+import static factories.BrowserManagerFactory.DriverType.FIREFOX;
+
+@Log4j2
 @Listeners(TestListener.class)
-public class BaseTest {
+public abstract class BaseWithStepsTest {
     public WebDriver browser;
+    public BrowserManager browserManager;
     public Faker faker;
-    public LoginPage loginPage;
+    public LoginSteps loginSteps;
+    public CreateContactSteps createContactSteps;
     public HomePage homePage;
     public ForgotYourPasswordPage forgotYourPasswordPage;
-    public CreateContactPage createContactPage;
+    private String username;
+    private String password;
+
+    public String getUsername() {
+        return username;
+    }
+
+    public String getPassword() {
+        return password;
+    }
 
     @Parameters({"browserType", "headlessMode", "isLogin"})
     @BeforeMethod(description = "Opening browser")
@@ -37,39 +57,25 @@ public class BaseTest {
                       @Optional("false") String headlessMode,
                       @Optional("true") String isLogin) {
         if (browserType.equals("chrome")) {
-            WebDriverManager.chromedriver().setup();
-            ChromeOptions options = new ChromeOptions();
-            options.addArguments("window-size=1920x1080");
-            options.addArguments("--disable-notifications");
-            options.setHeadless(headlessMode.equals("true"));
-            browser = new ChromeDriver(options);
-            browser.manage().deleteAllCookies();
+            browserManager = BrowserManagerFactory.getBrowser(CHROME);
+            username = System.getProperty("usernameChrome");
+            password = System.getProperty("passwordChrome");
         } else if (browserType.equals("firefox")) {
-            WebDriverManager.firefoxdriver().setup();
-            FirefoxOptions options = new FirefoxOptions();
-            options.addArguments("window-size=1920х1080");
-            options.addArguments("--disable-notifications");
-            options.addPreference("dom.webnotifications.enabled", false);
-            options.setHeadless(headlessMode.equals("true"));
-            browser = new FirefoxDriver(options);
-            browser.manage().deleteAllCookies();
+            browserManager = BrowserManagerFactory.getBrowser(FIREFOX);
+            username = System.getProperty("usernameFirefox");
+            password = System.getProperty("passwordFirefox");
+//
         }
-        // для связки с скриншотами в TestListener
+        browser = browserManager.getBrowser(headlessMode);
+        // для связки со скриншотами в TestListener
         testContext.setAttribute("browser", browser);
         faker = new Faker();
-        loginPage = new LoginPage(browser);
+        loginSteps = new LoginSteps(browser);
         homePage = new HomePage(browser);
-        createContactPage = new CreateContactPage(browser);
+        createContactSteps = new CreateContactSteps(browser);
         forgotYourPasswordPage = new ForgotYourPasswordPage(browser);
         browser.manage().window().maximize();
         browser.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        if (isLogin.equals("false")) {
-            System.out.println("Skip");
-        } else if (browserType.equals("chrome")) {
-            loginPage.signUp(System.getProperty("usernameChrome"), System.getProperty("passwordChrome"));
-        } else if (browserType.equals("firefox")) {
-            loginPage.signUp(System.getProperty("usernameFirefox"), System.getProperty("passwordFirefox"));
-        }
     }
 
     @AfterMethod(alwaysRun = true, description = "closing browser")
@@ -79,7 +85,8 @@ public class BaseTest {
         }
     }
 
-    public void postConditionDeleteContact() {
+    @Step("Deleting already created contact by id...")
+    public void deleteCreatedContact() {
         Assert.assertTrue(CreateContactPage.isContactNameAppeared(), "Contact name hadn't appeared at 'Create Contact page' after creating contact");
         String idContact = browser.getCurrentUrl().substring(63, 81);
         try {
