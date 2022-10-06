@@ -1,10 +1,14 @@
 package tests.utils;
 
+import io.qameta.allure.Attachment;
 import okhttp3.*;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import org.openqa.selenium.Cookie;
+import org.openqa.selenium.OutputType;
+import org.openqa.selenium.TakesScreenshot;
+import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import pages.LoginPage;
 import tests.base.BaseTest;
@@ -15,6 +19,7 @@ import java.util.Date;
 import static java.lang.String.format;
 
 public class SFAPIUtils extends BaseTest {
+
     public static String accessToken() throws IOException, ParseException {
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
@@ -59,5 +64,10 @@ public class SFAPIUtils extends BaseTest {
         browser.get(LOGIN_URL);
         org.openqa.selenium.Cookie cookie = new Cookie("sid", sidValue, "/", (new Date(System.currentTimeMillis() * 1000L)));
         browser.manage().addCookie(cookie);
+    }
+
+    @Attachment(value = "screenshot", type = "image/png")
+    public static byte[] takeScreenshot(WebDriver browser) {
+        return ((TakesScreenshot) browser).getScreenshotAs(OutputType.BYTES);
     }
 }

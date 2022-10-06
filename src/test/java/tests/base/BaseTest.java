@@ -10,6 +10,7 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.testng.Assert;
+import org.testng.ITestContext;
 import org.testng.annotations.*;
 import pages.*;
 import tests.utils.SFAPIUtils;
@@ -18,8 +19,8 @@ import java.io.File;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.Duration;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 @Listeners(TestListener.class)
 public class BaseTest {
@@ -31,8 +32,8 @@ public class BaseTest {
     public CreateContactPage createContactPage;
 
     @Parameters({"browserType", "headlessMode", "isLogin"})
-    @BeforeMethod
-    public void setup(@Optional("chrome") String browserType,
+    @BeforeMethod(description = "Opening browser")
+    public void setup(@Optional("chrome") String browserType, ITestContext testContext,
                       @Optional("false") String headlessMode,
                       @Optional("true") String isLogin) {
         if (browserType.equals("chrome")) {
@@ -53,13 +54,15 @@ public class BaseTest {
             browser = new FirefoxDriver(options);
             browser.manage().deleteAllCookies();
         }
+        // для связки с скриншотами в TestListener
+        testContext.setAttribute("browser", browser);
         faker = new Faker();
         loginPage = new LoginPage(browser);
         homePage = new HomePage(browser);
         createContactPage = new CreateContactPage(browser);
         forgotYourPasswordPage = new ForgotYourPasswordPage(browser);
         browser.manage().window().maximize();
-        browser.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        browser.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         if (isLogin.equals("false")) {
             System.out.println("Skip");
         } else if (browserType.equals("chrome")) {
@@ -69,7 +72,7 @@ public class BaseTest {
         }
     }
 
-    @AfterMethod(alwaysRun = true)
+    @AfterMethod(alwaysRun = true, description = "closing browser")
     public void tearDown() {
         if (browser != null) {
             browser.quit();

@@ -20,7 +20,7 @@ public class LoginPageTest extends BaseTest {
             groups = "valid login")
     public void successfulSignUp() {
         homePage.open();
-        assertTrue(homePage.isOpened(), "Home page hadn't open");
+        assertTrue(homePage.isOpened(), "Home page hadn't opened");
     }
 
     @Test(dataProvider = "loginData",

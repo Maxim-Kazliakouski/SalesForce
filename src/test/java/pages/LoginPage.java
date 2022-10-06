@@ -1,8 +1,11 @@
 package pages;
 
+import io.qameta.allure.Step;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.testng.Assert;
+import org.openqa.selenium.support.PageFactory;
+
+import static org.testng.Assert.assertTrue;
 
 public class LoginPage extends BasePage {
     private final By ERROR_MISSED_PASSWORD = By.id("error");
@@ -23,44 +26,56 @@ public class LoginPage extends BasePage {
 
     public LoginPage(WebDriver browser) {
         super(browser);
+        PageFactory.initElements(browser, this);
     }
 
+    @Step("Opening login page")
     public void open() {
-        String LOGIN_URL = "https://oxagile-dev-ed.my.salesforce.com/";
-        browser.get(LOGIN_URL);
+        browser.get(BASE_URL);
     }
 
     public boolean isOpened() {
         return waitForElementClickable(browser.findElement(LOGIN_BUTTON));
     }
 
+    @Step("Click on forgot password link at Login page")
     public void clickForgotPasswordLink() {
         browser.findElement(FORGOT_PASSWORD_LINK).click();
     }
 
+
+    @Step("Getting error message")
     public String getErrorMessage() {
         waitForVisibility(ERROR_MISSED_PASSWORD);
         return browser.findElement(ERROR_MISSED_PASSWORD).getText();
     }
 
+    @Step("Checkbox 'Remember me' at the Login Page")
     public boolean isCheckboxRememberMeAppeared() {
         return waitForVisibility(TEXT_CHECKBOX_REMEMBER_ME);
     }
 
+    @Step("Checkbox 'Remember me' has unchecked position")
     public boolean isCheckboxRememberMeUnchecked() {
         waitForVisibility(CHECKBOX_REMEMBER_ME);
+//        return browser.findElement(CHECKBOX_REMEMBER_ME).isSelected();
         return browser.findElement(CHECKBOX_REMEMBER_ME).isSelected();
     }
 
+    @Step("'Forgot Password Link' at the Forgot Password page")
     public boolean isForgotPasswordLinkAppeared() {
         return waitForVisibility(FORGOT_PASSWORD_LINK);
     }
 
+    @Step("Login by '{username}', using password '{password}'")
     public void signUp(String username, String password) {
         open();
-        Assert.assertTrue(isOpened(), "Login page wasn't opened!");
-        browser.findElement(LoginPage.USERNAME).sendKeys(username);
-        browser.findElement(LoginPage.PASSWORD).sendKeys(password);
-        browser.findElement(LoginPage.LOGIN_BUTTON).click();
+        assertTrue(isOpened(), "Login page wasn't opened!");
+        assertTrue(waitForElementClickable(browser.findElement(USERNAME)), "There is no field USERNAME");
+        browser.findElement(USERNAME).sendKeys(username);
+        waitForVisibility(PASSWORD);
+        browser.findElement(PASSWORD).sendKeys(password);
+        waitForVisibility(LOGIN_BUTTON);
+        browser.findElement(LOGIN_BUTTON).click();
     }
 }
