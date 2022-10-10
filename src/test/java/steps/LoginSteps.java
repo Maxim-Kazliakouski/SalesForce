@@ -28,16 +28,13 @@ public class LoginSteps {
     @Step("Open Login page")
     public LoginSteps open() {
         loginPage.open();
-        log.info("Opening 'Login page'");
         assertTrue(loginPage.isOpened(), "The Login Page hadn't opened");
         return this;
     }
 
     @Step("Login")
     public void login(String username, String password) {
-        log.info("Trying to login");
         loginPage.signUp(username, password);
-        log.info("Redirection to the 'Home page'");
         homePage.open();
         assertTrue(homePage.isOpened(), "The Home Page hadn't opened");
     }

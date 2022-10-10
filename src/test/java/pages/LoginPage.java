@@ -48,14 +48,12 @@ public class LoginPage extends BasePage {
 
     @Step("Click on forgot password link at Login page")
     public LoginPage clickForgotPasswordLink() {
-        log.info("Click on 'Forgot password' link'");
         forgotPasswordLink.click();
         return this;
     }
 
     @Step("Getting error message")
     public String errorMessage() {
-        log.info("Getting error message...");
         waitForVisibility(errorMissedPassword);
         log.info(format("Error message has been got --> %s", errorMissedPassword.getText()));
         return errorMissedPassword.getText();
@@ -63,20 +61,17 @@ public class LoginPage extends BasePage {
 
     @Step("Checkbox 'Remember me' at the Login Page")
     public boolean isCheckboxRememberMeAppeared() {
-        log.info("Checking 'Remember me' checkbox at 'Login Page'");
         return waitForVisibility(textCheckboxRememberMe);
     }
 
     @Step("Checkbox 'Remember me' has unchecked position")
     public boolean isCheckboxRememberMeUnchecked() {
-        log.info("Checking 'Remember me' checkbox is unchecked at 'Login Page'");
         waitForVisibility(checkboxRememberMe);
         return checkboxRememberMe.isSelected();
     }
 
     @Step("'Forgot Password' link at the 'Forgot Password' page")
     public boolean isForgotPasswordLinkAppeared() {
-        log.info("Checking 'Forgot password' link' at the 'Forgot password' page");
         return waitForVisibility(forgotPasswordLink);
     }
 
