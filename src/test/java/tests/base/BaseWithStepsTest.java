@@ -18,6 +18,7 @@ import pages.ForgotYourPasswordPage;
 import pages.HomePage;
 import steps.CreateContactSteps;
 import steps.LoginSteps;
+import utils.PropertyReader;
 import utils.SFAPIUtils;
 
 import java.io.File;
@@ -58,12 +59,13 @@ public abstract class BaseWithStepsTest {
                       @Optional("true") String isLogin) {
         if (browserType.equals("chrome")) {
             browserManager = BrowserManagerFactory.getBrowser(CHROME);
-            username = System.getProperty("usernameChrome");
-            password = System.getProperty("passwordChrome");
+
+            username = System.getProperty("USERNAME_CHROME", PropertyReader.getProperty("usernameChrome"));
+            password = System.getProperty("PASSWORD_CHROME", PropertyReader.getProperty("passwordChrome"));
         } else if (browserType.equals("firefox")) {
             browserManager = BrowserManagerFactory.getBrowser(FIREFOX);
-            username = System.getProperty("usernameFirefox");
-            password = System.getProperty("passwordFirefox");
+            username = System.getProperty("USERNAME_FIREFOX", PropertyReader.getProperty("usernameFirefox"));
+            password = System.getProperty("PASSWORD_FIREFOX", PropertyReader.getProperty("passwordFirefox"));
 //
         }
         browser = browserManager.getBrowser(headlessMode);
