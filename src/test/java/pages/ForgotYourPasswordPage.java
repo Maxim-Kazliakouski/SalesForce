@@ -1,11 +1,13 @@
 package pages;
 
 import io.qameta.allure.Step;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 public class ForgotYourPasswordPage extends BasePage {
-    private final By FORGOT_PASSWORD_TITLE = By.xpath("//h1[text()='Forgot Your Password']");
+    @FindBy(xpath = "//h1[text()='Forgot Your Password']")
+    WebElement forgotPasswordTittle;
     private final static String FORGOT_PASSWORD_URL = BASE_URL + "/secur/forgotpassword.jsp?locale=us";
 
     public ForgotYourPasswordPage(WebDriver browser) {
@@ -18,6 +20,6 @@ public class ForgotYourPasswordPage extends BasePage {
     }
 
     public boolean isOpened() {
-        return waitForVisibility(FORGOT_PASSWORD_TITLE);
+        return waitForVisibility(forgotPasswordTittle);
     }
 }

@@ -1,11 +1,13 @@
 package pages;
 
 import io.qameta.allure.Step;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
 
 public class HomePage extends BasePage {
-    private final By SEARCH = By.xpath("//input[@role='combobox']");
+    @FindBy(xpath = "//input[@role='combobox']")
+    WebElement search;
     private final String HOME_PAGE_URL = BASE_URL + "/lightning/setup/SetupOneHome/home";
 
     public HomePage(WebDriver browser) {
@@ -18,6 +20,6 @@ public class HomePage extends BasePage {
     }
 
     public boolean isOpened() {
-        return waitForVisibility(SEARCH);
+        return waitForVisibility(search);
     }
 }

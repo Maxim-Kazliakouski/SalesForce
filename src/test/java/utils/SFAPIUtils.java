@@ -1,6 +1,8 @@
-package tests.utils;
+package utils;
 
 import io.qameta.allure.Attachment;
+import io.qameta.allure.Step;
+import lombok.extern.log4j.Log4j2;
 import okhttp3.*;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -11,14 +13,14 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.testng.Assert;
 import pages.LoginPage;
-import tests.base.BaseTest;
+import tests.base.BaseWithStepsTest;
 
 import java.io.IOException;
 import java.util.Date;
 
 import static java.lang.String.format;
-
-public class SFAPIUtils extends BaseTest {
+@Log4j2
+public class SFAPIUtils extends BaseWithStepsTest {
 
     public static String accessToken() throws IOException, ParseException {
         OkHttpClient client = new OkHttpClient().newBuilder()
@@ -43,8 +45,9 @@ public class SFAPIUtils extends BaseTest {
         // Get accessToken
         return (String) jsonObject.get("access_token");
     }
-
+    @Step("Deleting already created user with id contact --> '{idContact}'")
     public static void deleteContact(String idContact) throws IOException, ParseException {
+        log.info(format("Deleting contact by id --> %s", idContact));
         OkHttpClient client = new OkHttpClient().newBuilder()
                 .build();
         MediaType mediaType = MediaType.parse("text/plain");

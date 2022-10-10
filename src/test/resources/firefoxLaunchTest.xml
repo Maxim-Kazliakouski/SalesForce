@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd"[
+        <!ENTITY headlessMode "true">]>
+<suite name="TestsSalesForceFirefox" parallel="classes" thread-count="3">
+    <listeners>
+        <listener class-name="tests.base.AnnotationTransformer"/>
+        <listener class-name="tests.base.TestListener"/>
+    </listeners>
+    <test name="Firefox: Login tests">
+        <classes>
+            <class name="tests.LoginPageTest"/>
+            <parameter name="browserType" value="firefox"/>
+            <parameter name="headlessMode" value="&headlessMode;"/>
+        </classes>
+    </test>
+    <test name="Firefox: create contact tests">
+        <classes>
+            <class name="tests.CreateContactPageTest"/>
+            <parameter name="browserType" value="firefox"/>
+            <parameter name="headlessMode" value="&headlessMode;"/>
+        </classes>
+    </test>
+</suite>

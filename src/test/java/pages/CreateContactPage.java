@@ -1,55 +1,60 @@
 package pages;
 
 import io.qameta.allure.Step;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.support.FindBy;
+import dto.Contact;
 import tests.wrappers.Dropdown;
 import tests.wrappers.Input;
 import tests.wrappers.Textarea;
 
 public class CreateContactPage extends BasePage {
-    private final By TITLE_CREATE_CONTACT_PAGE = By.xpath("//h2[text()='New Contact']");
-    private final By TOAST_MESSAGE = By.xpath("//span[@class='toastMessage slds-text-heading--small forceActionsText']");
-    public static By CREATED_CONTACT_NAME = By.xpath("//span[@class='custom-truncate uiOutputText']");
-    public static By SAVE_BUTTON = By.xpath("//button[text()='Save']");
+
+    @FindBy(xpath = "//h2[text()='New Contact']")
+    WebElement titleCreateContactPage;
+    @FindBy(xpath = "//span[@class='toastMessage slds-text-heading--small forceActionsText']")
+    WebElement toastMessage;
+    @FindBy(xpath = "//span[@class='custom-truncate uiOutputText']")
+    static WebElement createdContactPage;
+    @FindBy(xpath = "//button[text()='Save']")
+    WebElement saveButton;
 
     public CreateContactPage(WebDriver browser) {
         super(browser);
     }
 
-    @Step("Creating user with firstname '{firstName}', lastname '{lastName}' and other parameters...")
-    public void createContact(String firstName, String lastName, String phone, String salutationOption, String leadSourceOption, String text) {
-        new Input(browser, "First Name").write(firstName);
-        new Input(browser, "Last Name").write(lastName);
-        new Input(browser, "Phone").write(phone);
-        new Dropdown(browser, "Salutation").select(salutationOption);
-        new Dropdown(browser, "Lead Source").select(leadSourceOption);
-        new Textarea(browser, "Mailing Street").input(text);
-        browser.findElement(SAVE_BUTTON).click();
+    @Step("Create contact with params:")
+    public void createContact(Contact contact) {
+        new Input(browser, "First Name").write(contact.getFirstName());
+        new Input(browser, "Last Name").write(contact.getLastName());
+        new Input(browser, "Phone").write(contact.getPhone());
+        new Dropdown(browser, "Salutation").select(contact.getSalutation());
+        new Dropdown(browser, "Lead Source").select(contact.getLeadSourceOption());
+        new Textarea(browser, "Mailing Street").input(contact.getAddress());
+        saveButton.click();
     }
 
-    @Step("Open the Create contact page")
     public void open() {
         String CREATE_USER_URL = "https://oxagile-dev-ed.lightning.force.com/lightning/o/Contact/new?count=1";
         browser.get(CREATE_USER_URL);
     }
 
-
     public boolean isOpened() {
-        return waitForVisibility(TITLE_CREATE_CONTACT_PAGE);
+        return waitForVisibility(titleCreateContactPage);
     }
 
     public boolean isToastMessageAppeared() {
-        return waitForVisibility(TOAST_MESSAGE);
+        return waitForVisibility(toastMessage);
     }
 
     @Step("Getting toast message")
     public String getToastMessageText() {
-        System.out.println(browser.findElement(TOAST_MESSAGE).getText());
-        return browser.findElement(TOAST_MESSAGE).getText();
+        System.out.println(toastMessage.getText());
+        return toastMessage.getText();
     }
 
     public static boolean isContactNameAppeared() {
-        return waitForVisibility(CREATED_CONTACT_NAME);
+        return waitForVisibility(createdContactPage);
     }
 }

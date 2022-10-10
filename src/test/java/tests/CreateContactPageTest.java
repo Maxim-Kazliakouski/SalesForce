@@ -1,28 +1,23 @@
 package tests;
 
+import dto.Contact;
+import factories.ContactFactory;
+import groovy.util.logging.Log4j2;
 import org.testng.annotations.Test;
-import tests.base.BaseTest;
+import tests.base.BaseWithStepsTest;
 
-import static org.testng.Assert.assertEquals;
-import static org.testng.Assert.assertTrue;
-
-public class CreateContactPageTest extends BaseTest {
+@Log4j2
+public class CreateContactPageTest extends BaseWithStepsTest {
 
     @Test(description = "creating user")
     public void createNewUser() {
-        String firstName = faker.name().firstName();
-        String salutationOption = "Mr.";
-        String lastName = faker.name().lastName();
-        homePage.open();
-        assertTrue(homePage.isOpened(), "Home page wasn't open");
-        createContactPage.open();
-        assertTrue(createContactPage.isOpened(), "Create new user page wasn't open");
-        createContactPage.createContact(firstName, lastName, "1234567",
-                salutationOption, "Web", "Minsk, pr.Nezavisimosti");
-        assertTrue(createContactPage.isToastMessageAppeared(),
-                "The confirmation message about success created user wasn't appeared!");
-        assertEquals(createContactPage.getToastMessageText(),
-                "Contact \"" + salutationOption + " " + firstName + " " + lastName + "\" was created.");
-        postConditionDeleteContact();
+        Contact contact = ContactFactory.get();
+        loginSteps
+                .open()
+                .login(getUsername(), getPassword());
+        createContactSteps
+                .goToCreateContactPage()
+                .createNewContact(contact);
+        deleteCreatedContact();
     }
 }

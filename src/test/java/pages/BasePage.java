@@ -1,6 +1,7 @@
 package pages;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -14,13 +15,16 @@ public abstract class BasePage {
     public BasePage(WebDriver browser) {
         this.browser = browser;
         wait = new WebDriverWait(browser, Duration.ofSeconds(10));
+        PageFactory.initElements(browser, this);
     }
 
     public final static String BASE_URL = "https://oxagile-dev-ed.my.salesforce.com";
 
-    public static boolean waitForVisibility(By locator) {
+    public abstract boolean isOpened();
+
+    public static boolean waitForVisibility(WebElement webElement) {
         try {
-            wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+            wait.until(ExpectedConditions.visibilityOf(webElement));
             return true;
         } catch (TimeoutException ex) {
             return false;

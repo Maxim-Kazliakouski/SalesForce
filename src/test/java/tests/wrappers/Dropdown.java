@@ -6,7 +6,7 @@ import pages.BasePage;
 
 import static java.lang.String.format;
 
-public class Dropdown extends BasePage {
+public class Dropdown extends BasePage{
     String label;
 
     public Dropdown(WebDriver browser, String label) {
@@ -19,5 +19,10 @@ public class Dropdown extends BasePage {
         clickJS(dropdown);
         By dropdownOption = By.xpath(format("//span[@class='slds-media__body']//span[@class='slds-truncate'][text()='%s']", option));
         clickJS(dropdownOption);
+    }
+
+    @Override
+    public boolean isOpened() {
+        return false;
     }
 }
