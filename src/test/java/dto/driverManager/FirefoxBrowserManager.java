@@ -13,7 +13,7 @@ public class FirefoxBrowserManager extends BrowserManager {
         options.addArguments("window-size=1920x1080");
         options.addArguments("--disable-notifications");
         options.addPreference("dom.webnotifications.enabled", false);
-        options.setHeadless(headlessMode.equals("true"));
+        options.setHeadless(Boolean.parseBoolean(headlessMode));
         browser = new FirefoxDriver(options);
         browser.manage().deleteAllCookies();
     }

@@ -12,7 +12,7 @@ public class ChromeBrowserManager extends BrowserManager {
         ChromeOptions options = new ChromeOptions();
         options.addArguments("window-size=1920x1080");
         options.addArguments("--disable-notifications");
-        options.setHeadless(headlessMode.equals("true"));
+        options.setHeadless(Boolean.parseBoolean(headlessMode));
         browser = new ChromeDriver(options);
         browser.manage().deleteAllCookies();
     }
